@@ -1,4 +1,5 @@
 {
-    "eslint.enable": false,
-    "jshint.enable": false
+  "eslint.enable": true,
+  "purescript.addNpmPath": true,
+  "purescript.buildCommand": "pulp build --no-psa --json-errors"
 }

@@ -1,13 +1,13 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require('path')
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: [ path.join(__dirname, 'src/index.js') ],
   output: {
-    path: path.resolve('./static/dist'),
-    filename: '[name]-[hash].min.js',
-    publicPath: '/dist/'
+    path: path.resolve('./dist/'),
+    filename: '[name]-[hash].min.js'
   },
   module: {
     loaders: [
@@ -16,18 +16,19 @@ module.exports = {
         loader: 'purs-loader',
         exclude: /node_modules/,
         query: {
-          psc: 'psa',
           bundle: true,
+          psc: 'psa',
           warnings: false
         }
       }
-    ],
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new webpack.optimize.OccurrenceOrderPlugin(true),
+    new webpack.optimize.UglifyJsPlugin(),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false
@@ -37,6 +38,12 @@ module.exports = {
       inject: 'body',
       filename: 'index.html'
     }),
+    new CopyWebpackPlugin([
+      {
+        from: 'static/',
+        to: './'
+      }
+    ])
   ],
   resolveLoader: {
     modules: [
@@ -50,4 +57,4 @@ module.exports = {
     ],
     extensions: ['.js', '.purs']
   }
-};
+}
